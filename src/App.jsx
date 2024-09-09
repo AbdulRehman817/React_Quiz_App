@@ -92,18 +92,148 @@
 
 // export default App;
 
+// import axios from "axios";
+// import React, { useEffect, useState, useRef } from "react";
+// // import intoductionpage from "./intoductionpage";
+
+// const App = () => {
+//   const [questions, setQuestions] = useState([]);
+//   const [userAnswers, setUserAnswers] = useState([]);
+//   const [score, setScore] = useState(0);
+//   const [selVal, setSelVal] = useState(null);
+//   const [questionState, setQuestionState] = useState(0);
+//   const [quizComplete, setQuizComplete] = useState(false);
+
+//   function shuffleArray(array) {
+//     for (let i = array.length - 1; i > 0; i--) {
+//       const j = Math.floor(Math.random() * (i + 1));
+
+//       [array[i], array[j]] = [array[j], array[i]];
+//     }
+
+//     return array;
+//   }
+
+//   const checkedInput = useRef([]);
+
+//   const fetchQuestions = () => {
+//     axios("https://the-trivia-api.com/v2/questions")
+//       .then((res) => {
+//         console.log(res.data);
+//         setQuestions(res.data);
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   };
+
+//   const handleAnswerSelection = (event) => {
+//     const value = event.target.value;
+//     setUserAnswers((prevAnswers) => {
+//       const newAnswers = [...prevAnswers];
+//       newAnswers[questionState] = value;
+//       return newAnswers;
+//     });
+//   };
+
+//   const nextQuestion = () => {
+//     if (!selVal) {
+//       alert("Please select an answer");
+//       return;
+
+//     } else {
+//       const checkedButton = checkedInput.current.find((input) => input.checked);
+//       if (checkedButton) {
+//         const selectedValue = checkedButton.value;
+//         console.log("Selected answer:", selectedValue);
+//         handleAnswerSelection({ target: { value: selectedValue } });
+//       }
+//     }
+
+//     if (questionState < questions.length - 1) {
+//       setQuestionState(questionState + 1);
+//     } else {
+//       setQuizComplete(true);
+//       calculateScore();
+//     }
+//   };
+
+//   const calculateScore = () => {
+//     let totalScore = 0;
+//     questions.forEach((question, index) => {
+//       if (userAnswers[index] === question.correctAnswer) {
+//         totalScore += 1;
+//       }
+//     });
+//     setScore(totalScore);
+//   };
+
+//   useEffect(() => {
+//     fetchQuestions();
+//   }, []);
+
+//   if (quizComplete) {
+//     return (
+//       <div className="container">
+//         <h1>Quiz Completed!</h1>
+//         <p className="p">
+//           Your Score: {score}/{questions.length}
+//         </p>
+//         <button onClick={() => window.location.reload()}>Play Again</button>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <>
+//       {/* <intoductionpage /> */}
+//       <br />
+//       {questions.length > 0 ? (
+//         <div className="container">
+//           <h1>Quiz App</h1>
+
+//           <h2>
+//             {questionState + 1}: {questions[questionState].question.text}
+//           </h2>
+
+//           <ul>
+//             {shuffleArray([
+//               ...questions[questionState].incorrectAnswers,
+//               questions[questionState].correctAnswer,
+//             ]).map((item, index) => (
+//               <li key={index}>
+//                 <input
+//                   type="radio"
+//                   name="choice"
+//                   id={item}
+//                   value={item}
+//                   ref={(el) => (checkedInput.current[index] = el)}
+//                 />
+//                 {item}
+//               </li>
+//             ))}
+//           </ul>
+//           <button onClick={nextQuestion}>Next {questionState + 1}</button>
+//           <p></p>
+//         </div>
+//       ) : (
+//         <h1>Loading</h1>
+//       )}
+//     </>
+//   );
+// };
+
+// export default App;
+
 import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
-import intoductionpage from "./intoductionpage";
 
 const App = () => {
   const [questions, setQuestions] = useState([]);
   const [userAnswers, setUserAnswers] = useState([]);
   const [score, setScore] = useState(0);
-  const [selVal, setSelVal] = useState(null);
   const [questionState, setQuestionState] = useState(0);
   const [quizComplete, setQuizComplete] = useState(false);
-
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -142,17 +272,15 @@ const App = () => {
       const selectedValue = checkedButton.value;
       console.log("Selected answer:", selectedValue);
       handleAnswerSelection({ target: { value: selectedValue } });
-    }
-    if (!selVal) {
-      alert("Please select an answer");
-      return;
-    }
 
-    if (questionState < questions.length - 1) {
-      setQuestionState(questionState + 1);
+      if (questionState < questions.length - 1) {
+        setQuestionState(questionState + 1);
+      } else {
+        setQuizComplete(true);
+        calculateScore();
+      }
     } else {
-      setQuizComplete(true);
-      calculateScore();
+      alert("Please select an answer before proceeding.");
     }
   };
 
@@ -184,14 +312,12 @@ const App = () => {
 
   return (
     <>
-      {/* <intoductionpage /> */}
       <br />
       {questions.length > 0 ? (
         <div className="container">
           <h1>Quiz App</h1>
-
           <h2>
-            {questionState + 1}: {questions[questionState].question.text}
+            Q{questionState + 1}: {questions[questionState].question.text}
           </h2>
 
           <ul>
@@ -211,7 +337,7 @@ const App = () => {
               </li>
             ))}
           </ul>
-          <button onClick={nextQuestion}>Next {questionState + 1}</button>
+          <button onClick={nextQuestion}>Next {}</button>
           <p></p>
         </div>
       ) : (
